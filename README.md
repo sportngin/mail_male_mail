@@ -28,7 +28,7 @@ In your mailer specify the 'mailman' to deliever the mail:
 
 ```
 class MainMailer < ActionMailer::Base
-  mailman :mailman_1s
+  mailman :mailman_1
 end
 ```
 
