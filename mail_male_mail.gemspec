@@ -14,5 +14,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = MailMaleMail::VERSION
 
-  gem.add_development_dependency "actionmailer"
+  gem.add_dependency "actionmailer", ">= 3.0.0"
+  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "debugger"
 end
