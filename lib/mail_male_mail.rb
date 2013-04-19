@@ -11,8 +11,8 @@ module MailMaleMail
   if defined? Rails::Railtie
     class MailMaleMailRailtie < Rails::Railtie
       initializer "mail_male_mail_initializer" do |app|
-        unless File.exist? MailMaleMail::Configuration::FILEPATH
-          raise LoadError, "#{MailMaleMail::Configuration::FILEPATH} is required for MailMaleMail and does not exist"
+        unless File.exist? MailMaleMail::Configuration.filepath
+          raise LoadError, "#{MailMaleMail::Configuration.filepath} is required for MailMaleMail and does not exist"
         end
         ActionMailer::Base.send(:include, MailMaleMail)
       end
@@ -29,13 +29,14 @@ module MailMaleMail
         attr_accessor :mmm_provider
       end
       attr_accessor :mmm_category, :mmm_variables
+      alias_method_chain :mail, :mmm_header_rewriting
 
       mailman('default')
     end
   end
 
-  def mail(headers={}, &block)
-    super(headers, &block).tap do |m|
+  def mail_with_mmm_header_rewriting(headers={}, &block)
+    mail_without_mmm_header_rewriting(headers, &block).tap do |m|
       send("write_#{self.class.mmm_provider}_headers") if self.class.mmm_provider
     end
   end
@@ -61,7 +62,9 @@ module MailMaleMail
         if config.key?('smtp_settings') && config['smtp_settings'].is_a?(Hash)
           self.smtp_settings = config['smtp_settings'].symbolize_keys
         end
-        self.mmm_provider = config['provider'] if config.key?('provider') && PROVIDERS.include?(config['provider'])
+        if config.key?('provider') && PROVIDERS.include?(config['provider'])
+          self.mmm_provider = config['provider']
+        end
       end
     end
   end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mail_male_mail (0.0.1)
+    mail_male_mail (0.0.2)
       actionmailer (>= 3.0.0)
 
 GEM

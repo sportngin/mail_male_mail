@@ -12,9 +12,8 @@ class Rails
 end
 
 require "mail_male_mail"
-
+ActionMailer::Base.send(:include, MailMaleMail)
 class MMMailer < ActionMailer::Base
-  include MailMaleMail
 end
 
 RSpec.configure do |config|
