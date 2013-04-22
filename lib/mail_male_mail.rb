@@ -29,14 +29,14 @@ module MailMaleMail
         attr_accessor :mmm_provider
       end
       attr_accessor :mmm_category, :mmm_variables
-      alias_method_chain :mail, :mmm_header_rewriting
+      alias_method_chain :mail, :mmm_headers
 
       mailman('default')
     end
   end
 
-  def mail_with_mmm_header_rewriting(headers={}, &block)
-    mail_without_mmm_header_rewriting(headers, &block).tap do |m|
+  def mail_with_mmm_headers(headers={}, &block)
+    mail_without_mmm_headers(headers, &block).tap do |m|
       send("write_#{self.class.mmm_provider}_headers") if self.class.mmm_provider
     end
   end
