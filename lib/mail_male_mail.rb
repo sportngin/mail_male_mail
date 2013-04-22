@@ -41,19 +41,17 @@ module MailMaleMail
     end
   end
 
-  def set_mail_male_mail_category(category)
+  def mail_male_mail_category(category)
     self.mmm_category = category
   end
-  alias :set_mmm_cateogry :set_mail_male_mail_category
 
-  def set_mail_male_mail_variables(variables)
+  def mail_male_mail_variables(variables)
     if variables.is_a?(Hash)
       self.mmm_variables = variables
     else
       raise TypeError, "variables must be a Hash"
     end
   end
-  alias :set_mmm_variables :set_mail_male_mail_variables
 
   module ClassMethods
     def mailman(name)
