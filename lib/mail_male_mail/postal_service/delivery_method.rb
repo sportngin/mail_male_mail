@@ -24,7 +24,7 @@ module MailMaleMail
         message[:from] = mail.from.to_s
         message[:extra_provider_data] = ActiveSupport::JSON.decode(mail.header['X-PostalService-Data'].to_s) if mail.header['X-PostalService-Data']
         if mail.header['X-PostalService-Provider']
-          message[:provider] = ActiveSupport::JSON.decode(mail.header['X-PostalService-Provider'].to_s)
+          message[:provider] = mail.header['X-PostalService-Provider'].to_s
         elsif self.settings[:provider]
           message[:provider] = self.settings[:provider]
         end
