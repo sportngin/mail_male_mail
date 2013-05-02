@@ -3,8 +3,8 @@ require 'spec_helper'
 class MMMSendGridMailer < MMMailer
   mailman :sendgrid
   def test_mail
-    set_mmm_cateogry("SendgridCategory1")
-    set_mmm_variables(:color => "blue", sound: "meow")
+    mail_male_mail_category("SendgridCategory1")
+    mail_male_mail_variables(:color => "blue", sound: "meow")
     mail(:subject => "Sengrid Testing", :from => "test@example.com", :to => "test2@example.com")
   end
 end
