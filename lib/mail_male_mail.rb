@@ -4,9 +4,11 @@ require "action_mailer"
 require "mail_male_mail/sendgrid"
 require "mail_male_mail/mailgun"
 require "mail_male_mail/configuration"
+require "mail_male_mail/postal_service/delivery_method"
+require "mail_male_mail/postal_service/mailer"
 
 module MailMaleMail
-  PROVIDERS = %w(sendgrid mailgun)
+  PROVIDERS = %w(sendgrid mailgun postal_service)
 
   if defined? Rails::Railtie
     class MailMaleMailRailtie < Rails::Railtie
@@ -15,6 +17,7 @@ module MailMaleMail
           raise LoadError, "#{MailMaleMail::Configuration.filepath} is required for MailMaleMail and does not exist"
         end
         ActionMailer::Base.send(:include, MailMaleMail)
+        ActionMailer::Base.add_delivery_method :postal_service, MailMaleMail::PostalService::DeliveryMethod, {}
       end
     end
   end
@@ -25,6 +28,7 @@ module MailMaleMail
       Configuration.load
       include(Sendgrid)
       include(Mailgun)
+      include(PostalService::Mailer)
       class << self
         attr_accessor :mmm_provider
       end
@@ -57,8 +61,8 @@ module MailMaleMail
     def mailman(name)
       if config = Configuration.get(name)
         self.delivery_method = config['delivery_method'].to_sym if config.key?('delivery_method')
-        if config.key?('smtp_settings') && config['smtp_settings'].is_a?(Hash)
-          self.smtp_settings = config['smtp_settings'].symbolize_keys
+        if config.key?("#{self.delivery_method}_settings") && config["#{self.delivery_method}_settings"].is_a?(Hash)
+          self.send("#{self.delivery_method}_settings=", config["#{self.delivery_method}_settings"].symbolize_keys)
         end
         if config.key?('provider') && PROVIDERS.include?(config['provider'])
           self.mmm_provider = config['provider']
