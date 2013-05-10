@@ -13,6 +13,7 @@ end
 
 require "mail_male_mail"
 ActionMailer::Base.send(:include, MailMaleMail)
+ActionMailer::Base.add_delivery_method :postal_service, MailMaleMail::PostalService::DeliveryMethod, {:url => "http://example.com"}
 class MMMailer < ActionMailer::Base
 end
 

@@ -28,5 +28,7 @@ production:
       enable_starttls_auto: true
       user_name: "test@example.com"
       password: "superamazingpasswordformailgun"
-
+  postal_service:
+    provider: postal_service
+    delivery_method: postal_service
 
