@@ -2,7 +2,8 @@ module MailMaleMail
   module PostalService
     def self.api_request(settings, message)
       if settings[:method].to_s == "iron_mq"
-        queue = IronMQ::Client.new(token: settings[:token], project_id: settings[:project_id]).queue(settings[:queue])
+        settings[:host] ||= "mq-aws-us-east-1"
+        queue = IronMQ::Client.new(host: settings[:host], token: settings[:token], project_id: settings[:project_id]).queue(settings[:queue])
         queue.post(message.to_json)
       else
         uri = URI(url)
