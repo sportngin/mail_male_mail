@@ -25,11 +25,17 @@ module MailMaleMail
         self.settings = options
       end
       def deliver!(mail)
-        message = {}
-        message[:to] = mail.to.join(", ")
+        message = [:to, :cc, :bcc].reduce({}) do |a, e|
+          val = mail.public_send(e)
+          a[e] = val.join(",") if val.present?
+
+          a
+        end
+
         message[:subject] = mail.subject.to_s
         message[:from] = mail.from.first.to_s
         message[:extra_provider_data] = ActiveSupport::JSON.decode(mail.header['X-PostalService-Data'].to_s) if mail.header['X-PostalService-Data']
+
         if mail.header['X-PostalService-Provider']
           message[:provider] = mail.header['X-PostalService-Provider'].to_s
         elsif self.settings[:provider]
