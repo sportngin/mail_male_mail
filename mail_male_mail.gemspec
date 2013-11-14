@@ -12,6 +12,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.name          = "mail_male_mail"
   gem.require_paths = ["lib"]
+  gem.license       = "MIT"
   gem.version       = MailMaleMail::VERSION
 
   gem.add_dependency "actionmailer", ">= 3.0.0"
